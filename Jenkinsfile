@@ -10,20 +10,18 @@ pipeline {
 
         stage('Build Backend Image') {
             steps {
-                sh '''
-                  cd backend
-                  docker build -t wanderlust-backend:v1 .
-                '''
+                dir('backend') {
+                    sh 'docker build -t wanderlust-backend:v1 .'
+                }
             }
         }
 
         stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                      cd backend
-                      sonar-scanner
-                    '''
+                dir('backend') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh 'sonar-scanner'
+                    }
                 }
             }
         }
